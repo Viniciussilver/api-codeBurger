@@ -10,6 +10,9 @@ class SessionControler {
       password: Yup.string().required(),
     })
 
+    const { email, password } = request.body
+
+    console.log(email, password)
     const userEmailOrPasswordInvalid = () => {
       return response
         .status(401)
@@ -19,8 +22,6 @@ class SessionControler {
     if (!(await schema.isValid(request.body))) {
       userEmailOrPasswordInvalid()
     }
-
-    const { email, password } = request.body
 
     const user = await User.findOne({
       where: { email },
@@ -39,7 +40,7 @@ class SessionControler {
       email,
       name: user.name,
       admin: user.admin,
-      token: jwt.sign({ id: user.id }, authConfig.secret, {
+      token: jwt.sign({ id: user.id, name: user.name }, authConfig.secret, {
         expiresIn: authConfig.expiresIn,
       }),
     })
