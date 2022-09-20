@@ -28,11 +28,11 @@ class SessionControler {
     })
 
     if (!user) {
-      userEmailOrPasswordInvalid()
+      return userEmailOrPasswordInvalid()
     }
 
     if (!(await user.checkPassword(password))) {
-      userEmailOrPasswordInvalid()
+      return userEmailOrPasswordInvalid()
     }
 
     return response.json({
