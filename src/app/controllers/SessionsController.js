@@ -12,7 +12,6 @@ class SessionControler {
 
     const { email, password } = request.body
 
-    console.log(email, password)
     const userEmailOrPasswordInvalid = () => {
       return response
         .status(401)
@@ -20,7 +19,7 @@ class SessionControler {
     }
 
     if (!(await schema.isValid(request.body))) {
-      userEmailOrPasswordInvalid()
+      return userEmailOrPasswordInvalid()
     }
 
     const user = await User.findOne({
