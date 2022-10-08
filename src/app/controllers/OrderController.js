@@ -1,8 +1,8 @@
 import * as Yup from "yup"
+import Product from "../models/Product"
 import Category from "../models/Category"
-import Products from "../models/Products"
+import Order from "../schemas/Order"
 import User from "../models/User"
-import Order from "../schemas/Orders"
 
 class OrderController {
   async store(request, response) {
@@ -25,7 +25,7 @@ class OrderController {
 
     const productsId = request.body.products.map((product) => product.id)
 
-    const orderProducts = await Products.findAll({
+    const updatedProducts = await Product.findAll({
       where: {
         id: productsId,
       },
@@ -38,19 +38,20 @@ class OrderController {
       ],
     })
 
-    const editedProducts = orderProducts.map((item) => {
+    const editedProduct = updatedProducts.map((product) => {
       const productIndex = request.body.products.findIndex(
-        (requestProduct) => requestProduct.id === item.id
+        (requestProduct) => requestProduct.id === product.id
       )
 
       const newProduct = {
-        id: item.id,
-        name: item.name,
-        price: item.price,
-        category: item.category.name,
-        url: item.url,
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        category: product.category.name,
+        url: product.url,
         quantity: request.body.products[productIndex].quantity,
       }
+
       return newProduct
     })
 
@@ -59,7 +60,7 @@ class OrderController {
         id: request.userId,
         name: request.userName,
       },
-      products: editedProducts,
+      products: editedProduct,
       status: "Pedido realizado",
     }
 
@@ -78,6 +79,7 @@ class OrderController {
     const schema = Yup.object().shape({
       status: Yup.string().required(),
     })
+
     try {
       await schema.validateSync(request.body, { abortEarly: false })
     } catch (err) {
@@ -95,10 +97,11 @@ class OrderController {
 
     try {
       await Order.updateOne({ _id: id }, { status })
-    } catch (err) {
-      return response.status(400).json({ error: err.message })
+    } catch (error) {
+      return response.status(400).json({ error: error.message })
     }
-    return response.json({ message: "status update sucessfully" })
+
+    return response.json({ message: "Status updated sucessfully" })
   }
 }
 

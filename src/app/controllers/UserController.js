@@ -1,6 +1,7 @@
 import { v4 } from "uuid"
-import User from "../models/User"
 import * as Yup from "yup"
+
+import User from "../models/User"
 
 class UserController {
   async store(request, response) {
@@ -24,10 +25,10 @@ class UserController {
     })
 
     if (userExists) {
-      return response.status(409).json({ error: "user already exists" })
+      return response.status(409).json({ error: "User already exists" })
     }
 
-    await User.create({
+    const user = await User.create({
       id: v4(),
       name,
       email,
@@ -35,7 +36,7 @@ class UserController {
       admin,
     })
 
-    return response.status(201).json({ name, email, admin })
+    return response.status(201).json({ id: user.id, name, email, admin })
   }
 }
 
