@@ -7,8 +7,8 @@ module.exports = {
   plugins: ["prettier"],
   overrides: [],
   parserOptions: {
-    ecmaVersion: "latest",
     sourceType: "module",
+    ecmaVersion: "latest",
   },
   rules: {
     camelcase: "off",
