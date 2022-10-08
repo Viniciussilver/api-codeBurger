@@ -8,6 +8,7 @@ import "./database"
 class App {
   constructor() {
     this.app = express()
+
     this.app.use(cors())
 
     this.middlewares()
@@ -18,12 +19,12 @@ class App {
     this.app.use(express.json())
     this.app.use(
       "/product-file",
-      express.static(resolve(__dirname, "..", "uoloads"))
+      express.static(resolve(__dirname, "..", "uploads"))
     )
 
     this.app.use(
       "/category-file",
-      express.static(resolve(__dirname, "..", "uoloads"))
+      express.static(resolve(__dirname, "..", "uploads"))
     )
   }
 

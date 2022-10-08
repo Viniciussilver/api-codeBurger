@@ -1,13 +1,13 @@
 import Sequelize from "sequelize"
 import mongoose from "mongoose"
 
-import Products from "../app/models/Products"
+import Product from "../app/models/Product"
 import User from "../app/models/User"
 import Category from "../app/models/Category"
 
 import configDatabase from "../config/database"
 
-const models = [User, Products, Category]
+const models = [User, Product, Category]
 
 class Database {
   constructor() {
@@ -18,7 +18,7 @@ class Database {
   init() {
     this.connection = new Sequelize(configDatabase)
     models
-      .map((models) => models.init(this.connection))
+      .map((model) => model.init(this.connection))
       .map(
         (model) => model.associate && model.associate(this.connection.models)
       )
@@ -29,7 +29,7 @@ class Database {
       "mongodb://localhost:27017/codeburger",
       {
         useNewUrlParser: true,
-        useUnifiedTopoLogy: true,
+        useUnifiedTopology: true,
       }
     )
   }
